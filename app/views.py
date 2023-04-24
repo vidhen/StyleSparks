@@ -253,7 +253,6 @@ def checkout(request):
 
 @login_required
 def payment_done(request):
-  totalitem = 0
   user = request.user
   custid = request.GET.get('custid')
   customer = Customer.objects.get(id=custid)
@@ -261,6 +260,4 @@ def payment_done(request):
   for c in cart:
     OrderPlaced(user=user, customer=customer, product=c.product, quantity=c.quantity).save()
     c.delete()
-  if request.user.is_authenticated:
-      totalitem = len(Cart.objects.filter(user=request.user))
-  return redirect("orders", {'totalitem': totalitem})
+  return redirect("orders")
